@@ -1,0 +1,47 @@
+#!/usr/bin/env python
+import os
+import signal
+import smtplib
+from email.mime.text import MIMEText
+import base64
+
+class Mailsender():
+	def __init__(self):
+		print ("i am sending the emails...")
+	
+	def setSmtpServer(self, smtpServer):
+		self.smtpserver = smtpServer
+
+	def setSender(self, sender, password):
+		self.sender = sender
+		self.password = password
+
+	def setReceiver(self, receiver):
+		self.receiver = receiver
+
+	def setSubject(self, subject):
+		self.subject = subject
+
+	def setContent(self, content):
+		self.content = content
+
+	def sendMail(self):
+		smtp = smtplib.SMTP()
+		smtp.connect(self.smtpserver, 25)
+		smtp.login(self.sender, self.password)
+
+		msg = 'From:%s\nTo:%s\nSubject:%s\nContent-Type:text/html\nContent-Transfer-Encoding:ascii\n\n%s'%(self.sender,self.receiver,self.subject, self.content)
+		smtp.sendmail(self.sender, self.receiver, msg)
+		smtp.close()
+
+	def __del__(self):
+		print ("finish sending mails")
+
+
+mail = Mailsender()
+mail.setSmtpServer("smtp.qq.com")
+mail.setSender("###@qq.com", "password")
+mail.setReceiver("###@qq.com")
+mail.setSubject("this is a test mail")
+mail.setContent("do you miss me?")
+mail.sendMail()
